@@ -11,6 +11,7 @@ window.onload = () => {
   const mintButton = document.getElementById("mintButton");
   const blenderVideo = document.getElementById("blenderVideo");
   const connectWalletButton = document.getElementById("connectWallet");
+  const disconnectWalletButton = document.getElementById("disconnectWallet");
   const walletOptions = document.getElementById("walletOptions");
   const cooperationModal = document.getElementById("cooperationModal");
   const cooperateButton = document.getElementById("cooperateButton");
@@ -116,12 +117,23 @@ window.onload = () => {
 
         // Hide wallet options dropdown
         walletOptions.style.display = "none";
+
+        // Show disconnect button
+        disconnectWalletButton.style.display = "block";
       } else {
         console.error("Failed to retrieve wallet public key.");
       }
     } catch (err) {
       console.error("Error connecting wallet:", err);
     }
+  }
+
+  // Disconnect wallet function
+  function disconnectWallet() {
+    walletAddress = '';
+    connectWalletButton.textContent = "Connect Wallet";
+    disconnectWalletButton.style.display = "none";
+    alert("Wallet disconnected.");
   }
 
   // Event listener for wallet buttons
@@ -136,6 +148,13 @@ window.onload = () => {
       connectWallet(walletType);
     });
   });
+
+  // Event listener for disconnect button
+  if (disconnectWalletButton) {
+    disconnectWalletButton.addEventListener("click", () => {
+      disconnectWallet();
+    });
+  }
 
   // Show the cooperation modal when the mint button is clicked
   if (mintButton) {
@@ -258,4 +277,5 @@ window.onload = () => {
 
   // Reset wallet connection on page refresh
   connectWalletButton.textContent = "Connect Wallet";
+  disconnectWalletButton.style.display = "none";
 };
