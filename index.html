@@ -4,307 +4,42 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Smoothies</title>
-
-    <!-- Import the Doto font from Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Doto&display=swap" rel="stylesheet">
-
-    <style>
-        body {
-            margin: 0;
-            font-family: 'Doto', sans-serif; /* Apply Doto font globally */
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
-            background-color: #808080;
-        }
-
-        header {
-            position: fixed;
-            top: 0;
-            width: 100%;
-            display: flex;
-            justify-content: flex-start;
-            align-items: center;
-            padding: 10px 20px;
-            background-color: #ffffff;
-            box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
-        }
-
-        .title {
-            margin-left: 20px;
-            font-size: 24px;
-            font-weight: bold;
-            text-transform: lowercase;
-            font-family: 'Doto', sans-serif;
-            cursor: pointer;
-        }
-
-        .button-container {
-            display: flex;
-            gap: 10px; /* Small space between buttons */
-            margin-left: auto; /* Push buttons to the right */
-        }
-
-        .popup-button {
-            padding: 10px 20px;
-            font-size: 16px;
-            background-color: #000000;
-            color: white;
-            border: none;
-            border-radius: 10px;
-            cursor: pointer;
-            text-transform: lowercase;
-            font-family: 'Doto', sans-serif;
-        }
-
-        .popup-button:hover {
-            background-color: #333333;
-        }
-
-        .connect-wallet {
-            margin-right: 20px;
-            padding: 10px 20px;
-            font-size: 16px;
-            background-color: #000000;
-            color: white;
-            border: none;
-            border-radius: 10px;
-            cursor: pointer;
-            text-transform: lowercase;
-            font-family: 'Doto', sans-serif;
-        }
-
-        .connect-wallet:hover {
-            background-color: #333333;
-        }
-
-        .wallet-options {
-            display: none;
-            position: absolute;
-            top: 60px;
-            right: 20px;
-            background: white;
-            border: 1px solid #ccc;
-            padding: 10px;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            z-index: 100;
-        }
-
-        .wallet-option {
-            padding: 10px;
-            cursor: pointer;
-            font-size: 16px;
-            margin: 5px 0;
-            text-align: center;
-            border: 1px solid #000000;
-            color: #000000;
-            border-radius: 5px;
-        }
-
-        .wallet-option:hover {
-            background: #000000;
-            color: white;
-        }
-
-        main {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            flex-grow: 1;
-            text-align: center;
-        }
-
-        .mint-button {
-            margin-top: 5px;
-            padding: 15px 30px;
-            font-size: 18px;
-            background-color: #000000;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            text-transform: lowercase;
-            font-family: 'Doto', sans-serif;
-        }
-
-        .mint-button:hover {
-            background-color: #333333;
-        }
-
-        video {
-            display: none;
-            width: 600px;
-            height: auto;
-            margin-top: 80px;
-            margin-bottom: 10px;
-            border: 2px solid black;
-            border-radius: 10px;
-        }
-
-        /* Cooperation Modal */
-        #cooperationModal {
-            display: none;
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            padding: 20px;
-            background-color: white;
-            border: 1px solid #ccc;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            z-index: 200;
-            text-align: center;
-        }
-
-        #cooperationModal button {
-            padding: 10px 20px;
-            margin: 10px;
-            border-radius: 5px;
-            border: none;
-            cursor: pointer;
-        }
-
-        #cooperationModal button:hover {
-            background-color: #333333;
-            color: white;
-        }
-
-        #outcomeModal {
-            display: none;
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            padding: 20px;
-            background-color: white;
-            border: 1px solid #ccc;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            z-index: 200;
-            text-align: center;
-        }
-
-        #outcomeModal button {
-            padding: 10px 20px;
-            margin-top: 10px;
-            border-radius: 5px;
-            border: none;
-            cursor: pointer;
-        }
-
-        #outcomeModal button:hover {
-            background-color: #333333;
-            color: white;
-        }
-
-        /* Dynamic Tracker Style */
-        .tracker {
-            position: fixed;
-            right: 20px;
-            bottom: 20px;
-            background-color: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-            z-index: 100;
-            font-family: 'Doto', sans-serif;
-            color: black;
-        }
-
-        .tracker p {
-            margin: 5px 0;
-            font-size: 16px;
-        }
-
-        /* Explanation and Tracker Pop-up Styles */
-        .popup {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background-color: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-            z-index: 1000;
-            display: none; /* Hidden by default */
-            max-width: 300px;
-            font-family: 'Doto', sans-serif;
-            color: black;
-        }
-
-        .popup p {
-            font-size: 14px;
-            margin: 10px 0;
-        }
-
-        /* Pop-out buttons */
-        .popup-button {
-            padding: 10px 20px;
-            font-size: 16px;
-            background-color: #000000;
-            color: white;
-            border: none;
-            border-radius: 10px;
-            cursor: pointer;
-            text-transform: lowercase;
-            font-family: 'Doto', sans-serif;
-        }
-
-        .popup-button:hover {
-            background-color: #333333;
-        }
-
-    </style>
+    <link rel="stylesheet" href="styles.css"> <!-- External stylesheet -->
 </head>
 <body>
     <header>
         <div class="title" id="title">Smoothies</div>
         <div class="button-container">
-            <button class="popup-button" id="wtfButton">WTF</button> <!-- WTF Button -->
-            <button class="popup-button" id="trackerButton">Tracker</button> <!-- Tracker Button -->
-            <button class="connect-wallet" id="connectWallet">Connect Wallet</button> <!-- Connect Wallet Button -->
+            <button class="popup-button" id="wtfButton" aria-label="WTF Button">WTF</button>
+            <button class="popup-button" id="trackerButton" aria-label="Tracker Button">Tracker</button>
+            <button class="connect-wallet" id="connectWallet" aria-label="Connect Wallet Button">Connect Wallet</button>
         </div>
     </header>
-
     <div class="wallet-options" id="walletOptions">
         <div class="wallet-option" onclick="connectWallet('Phantom')">Phantom</div>
         <div class="wallet-option" onclick="connectWallet('Solflare')">Solflare</div>
         <div class="wallet-option" onclick="connectWallet('Sollet')">Sollet</div>
     </div>
-    
     <main>
         <video id="blenderVideo" src="blendooor.mp4"></video>
         <button class="mint-button" id="mintButton">Mint for 0.2 SOL</button>
     </main>
-
-    <!-- Cooperation Modal -->
     <div id="cooperationModal">
         <p>Cooperate or Steal?</p>
         <button id="cooperateButton">Cooperate</button>
         <button id="stealButton">Steal</button>
     </div>
-
-    <!-- Outcome Modal -->
     <div id="outcomeModal">
         <p id="outcomeMessage"></p>
         <button id="closeOutcomeModal">Close</button>
     </div>
-
-    <!-- Tracker Pop-up -->
     <div class="popup" id="trackerPopup">
         <p>Smoothies Available to Mint: <span id="smoothiesAvailable">10000</span>/10000</p>
         <p>SMEWTH Tokens Minted: <span id="smeewthMinted">0</span></p>
         <p>Smoothies Minted: <span id="smoothiesMinted">0</span></p>
         <button id="closeTrackerPopup">Close</button>
     </div>
-
-    <!-- Explanation Pop-up -->
     <div class="popup" id="explanationPopup">
         <p>Welcome to Smoothies. Here is how minting works:</p>
         <p>When minting you have two options: cooperate or steal.</p>
@@ -316,7 +51,6 @@
         <p>Stay smooth.</p>
         <button id="closeExplanationPopup">Close</button>
     </div>
-
-    <script src="smoothie_script_test.js"></script>  <!-- Your JavaScript file -->
+    <script src="smoothie_script_test.js" defer></script>
 </body>
 </html>
