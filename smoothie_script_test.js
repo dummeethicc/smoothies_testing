@@ -99,7 +99,7 @@ window.onload = () => {
 
     // Start minting process with video and decision
     async function startMinting(cooperate) {
-        // Show the minting video when the mint button is clicked
+        // Show the minting video when the decision is made
         blenderVideo.style.display = "block";
         blenderVideo.play();
 
