@@ -24,7 +24,18 @@ window.onload = () => {
 
     let walletAddress = ''; // To store the connected wallet address
 
-    // Function to update the tracker UI
+    // Initialize tracker from localStorage
+    function initializeTracker() {
+        const available = localStorage.getItem('smoothiesAvailable') || '10000';
+        const smeewth = localStorage.getItem('smeewthMinted') || '0';
+        const smoothies = localStorage.getItem('smoothiesMinted') || '0';
+
+        smoothiesAvailable.textContent = available;
+        smeewthMinted.textContent = smeewth;
+        smoothiesMinted.textContent = smoothies;
+    }
+
+    // Function to update the tracker UI and localStorage
     function updateTracker(outcome) {
         let available = parseInt(smoothiesAvailable.textContent);
         let smeewth = parseInt(smeewthMinted.textContent);
@@ -43,6 +54,10 @@ window.onload = () => {
         smoothiesAvailable.textContent = available.toString();
         smeewthMinted.textContent = smeewth.toString();
         smoothiesMinted.textContent = smoothies.toString();
+
+        localStorage.setItem('smoothiesAvailable', available.toString());
+        localStorage.setItem('smeewthMinted', smeewth.toString());
+        localStorage.setItem('smoothiesMinted', smoothies.toString());
     }
 
     // Wallet selection toggle
@@ -215,4 +230,7 @@ window.onload = () => {
             outcomeModal.style.display = "none";
         }
     });
+
+    // Initialize the tracker on page load
+    initializeTracker();
 };
