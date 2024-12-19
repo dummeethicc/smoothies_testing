@@ -112,6 +112,21 @@ window.onload = () => {
         alert("Wallet not supported.");
         return;
       }
+
+      const connected = await provider.connect();
+      if (connected && connected.publicKey) {
+        walletAddress = connected.publicKey.toString();
+        console.log("Connected to wallet:", walletAddress);
+
+        // Update the button to show the wallet address abbreviation
+        const abbreviatedAddress = `${walletAddress.slice(0, 3)}...${walletAddress.slice(-4)}`;
+        connectWalletButton.textContent = abbreviatedAddress;
+
+        // Hide wallet options dropdown
+        walletOptions.style.display = "none";
+      } else {
+        console.error("Failed to retrieve wallet public key.");
+      }
     } catch (err) {
       console.error("Error connecting wallet:", err);
     }
