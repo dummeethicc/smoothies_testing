@@ -52,5 +52,12 @@
         <button id="closeExplanationPopup">Close</button>
     </div>
     <script src="smoothie_script_test.js" defer></script>
+    <script>
+        document.getElementById('mintButton').addEventListener('click', function() {
+            var video = document.getElementById('blenderVideo');
+            video.style.display = 'block';
+            video.play();
+        });
+    </script>
 </body>
 </html>
