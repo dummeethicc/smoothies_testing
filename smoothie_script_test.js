@@ -247,4 +247,7 @@ window.onload = () => {
 
   // Initialize the tracker on page load
   initializeTracker();
+
+  // Reset wallet connection on page refresh
+  connectWalletButton.textContent = "Connect Wallet";
 };
