@@ -106,15 +106,19 @@ window.onload = () => {
       }
 
       const connected = await provider.connect();
-      walletAddress = connected.publicKey.toString();
-      console.log("Connected to wallet:", walletAddress);
+      if (connected && connected.publicKey) {
+        walletAddress = connected.publicKey.toString();
+        console.log("Connected to wallet:", walletAddress);
 
-      // Update the button to show the wallet address abbreviation
-      const abbreviatedAddress = `${walletAddress.slice(0, 3)}...${walletAddress.slice(-4)}`;
-      connectWalletButton.textContent = abbreviatedAddress;
+        // Update the button to show the wallet address abbreviation
+        const abbreviatedAddress = `${walletAddress.slice(0, 3)}...${walletAddress.slice(-4)}`;
+        connectWalletButton.textContent = abbreviatedAddress;
 
-      // Hide wallet options dropdown
-      walletOptions.style.display = "none";
+        // Hide wallet options dropdown
+        walletOptions.style.display = "none";
+      } else {
+        console.error("Failed to retrieve wallet public key.");
+      }
     } catch (err) {
       console.error("Error connecting wallet:", err);
     }
