@@ -18,11 +18,31 @@ window.onload = () => {
     const title = document.getElementById("title");
     const outcomeMessage = document.getElementById("outcomeMessage");
 
+    const smoothiesAvailable = document.getElementById("smoothiesAvailable");
+    const smeewthMinted = document.getElementById("smeewthMinted");
+    const smoothiesMinted = document.getElementById("smoothiesMinted");
+
     let walletAddress = ''; // To store the connected wallet address
 
     // Function to update the tracker UI
-    function updateTracker() {
-        // Update tracker logic here
+    function updateTracker(outcome) {
+        let available = parseInt(smoothiesAvailable.textContent);
+        let smeewth = parseInt(smeewthMinted.textContent);
+        let smoothies = parseInt(smoothiesMinted.textContent);
+
+        if (outcome === '1 smoothie minted') {
+            smoothies++;
+            available--;
+        } else if (outcome === '2 smoothies minted') {
+            smoothies += 2;
+            available -= 2;
+        } else if (outcome === '1 SMEWTH token minted') {
+            smeewth++;
+        }
+
+        smoothiesAvailable.textContent = available.toString();
+        smeewthMinted.textContent = smeewth.toString();
+        smoothiesMinted.textContent = smoothies.toString();
     }
 
     // Wallet selection toggle
@@ -135,7 +155,7 @@ window.onload = () => {
                 outcomeModal.style.display = "block"; // Show outcome modal
             }
 
-            updateTracker();  // Update tracker UI with new stats
+            updateTracker(outcome);  // Update tracker UI with new stats
         }, 3000); // Adjust this duration based on your video length
     }
 
