@@ -11,7 +11,6 @@ window.onload = () => {
   const mintButton = document.getElementById("mintButton");
   const blenderVideo = document.getElementById("blenderVideo");
   const connectWalletButton = document.getElementById("connectWallet");
-  const disconnectWalletButton = document.getElementById("disconnectWallet");
   const walletOptions = document.getElementById("walletOptions");
   const cooperationModal = document.getElementById("cooperationModal");
   const cooperateButton = document.getElementById("cooperateButton");
@@ -94,13 +93,6 @@ window.onload = () => {
           alert("Solflare wallet not detected.");
           return;
         }
-      } else if (walletType === "Glow") {
-        if (window.glowSolana && window.glowSolana.isGlow) {
-          provider = window.glowSolana;
-        } else {
-          alert("Glow wallet not detected.");
-          return;
-        }
       } else {
         alert("Wallet not supported.");
         return;
@@ -117,9 +109,6 @@ window.onload = () => {
 
         // Hide wallet options dropdown
         walletOptions.style.display = "none";
-
-        // Show disconnect button
-        disconnectWalletButton.style.display = "block";
       } else {
         console.error("Failed to retrieve wallet public key.");
       }
@@ -128,33 +117,14 @@ window.onload = () => {
     }
   }
 
-  // Disconnect wallet function
-  function disconnectWallet() {
-    walletAddress = '';
-    connectWalletButton.textContent = "Connect Wallet";
-    disconnectWalletButton.style.display = "none";
-    alert("Wallet disconnected.");
-  }
-
   // Event listener for wallet buttons
   const walletOptionsList = document.querySelectorAll('.wallet-option');
   walletOptionsList.forEach((option) => {
     option.addEventListener('click', (event) => {
-      if (walletAddress) {
-        alert("A wallet is already connected. Please disconnect the current wallet before connecting a new one.");
-        return;
-      }
       const walletType = event.target.innerText;
       connectWallet(walletType);
     });
   });
-
-  // Event listener for disconnect button
-  if (disconnectWalletButton) {
-    disconnectWalletButton.addEventListener("click", () => {
-      disconnectWallet();
-    });
-  }
 
   // Show the cooperation modal when the mint button is clicked
   if (mintButton) {
@@ -277,5 +247,4 @@ window.onload = () => {
 
   // Reset wallet connection on page refresh
   connectWalletButton.textContent = "Connect Wallet";
-  disconnectWalletButton.style.display = "none";
 };
