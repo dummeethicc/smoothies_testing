@@ -89,6 +89,21 @@ window.onload = () => {
       } else if (walletType === "Solflare") {
         if (window.solflare && window.solflare.isSolflare) {
           provider = window.solflare;
+          await provider.connect();
+
+          if (provider.publicKey) {
+            walletAddress = provider.publicKey.toString();
+            console.log("Connected to wallet:", walletAddress);
+
+            // Update the button to show the wallet address abbreviation
+            const abbreviatedAddress = `${walletAddress.slice(0, 3)}...${walletAddress.slice(-4)}`;
+            connectWalletButton.textContent = abbreviatedAddress;
+
+            // Hide wallet options dropdown
+            walletOptions.style.display = "none";
+          } else {
+            console.error("Failed to retrieve wallet public key.");
+          }
         } else {
           alert("Solflare wallet not detected.");
           return;
@@ -96,21 +111,6 @@ window.onload = () => {
       } else {
         alert("Wallet not supported.");
         return;
-      }
-
-      const connected = await provider.connect();
-      if (connected && connected.publicKey) {
-        walletAddress = connected.publicKey.toString();
-        console.log("Connected to wallet:", walletAddress);
-
-        // Update the button to show the wallet address abbreviation
-        const abbreviatedAddress = `${walletAddress.slice(0, 3)}...${walletAddress.slice(-4)}`;
-        connectWalletButton.textContent = abbreviatedAddress;
-
-        // Hide wallet options dropdown
-        walletOptions.style.display = "none";
-      } else {
-        console.error("Failed to retrieve wallet public key.");
       }
     } catch (err) {
       console.error("Error connecting wallet:", err);
