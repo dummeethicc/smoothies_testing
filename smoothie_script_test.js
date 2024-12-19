@@ -128,6 +128,10 @@ window.onload = () => {
   const walletOptionsList = document.querySelectorAll('.wallet-option');
   walletOptionsList.forEach((option) => {
     option.addEventListener('click', (event) => {
+      if (walletAddress) {
+        alert("A wallet is already connected. Please disconnect the current wallet before connecting a new one.");
+        return;
+      }
       const walletType = event.target.innerText;
       connectWallet(walletType);
     });
