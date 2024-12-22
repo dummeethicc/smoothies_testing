@@ -148,7 +148,7 @@ window.onload = () => {
   }
 
   // Start minting process with video and decision
-  async function startMinting(cooperate) {
+  async function startMinting(decision) {
     // Show the minting video when the decision is made
     blenderVideo.style.display = "block";
     blenderVideo.play();
@@ -158,21 +158,8 @@ window.onload = () => {
       mintButton.style.display = "none";
     }
 
-    // Randomly decide the contract's action (cooperate or steal)
-    const contractDecision = Math.random() > 0.5 ? 'cooperate' : 'steal';
-
-    // Outcome determination based on cooperation/steal
-    let outcome = '';
-
-    if (cooperate === 'steal' && contractDecision === 'steal') {
-      outcome = 'Try again';
-    } else if (cooperate === 'cooperate' && contractDecision === 'cooperate') {
-      outcome = '1 smoothie minted';
-    } else if (cooperate === 'steal' && contractDecision === 'cooperate') {
-      outcome = '2 smoothies minted';
-    } else if (cooperate === 'cooperate' && contractDecision === 'steal') {
-      outcome = '1 SMEWTH token minted';
-    }
+    // Send the transaction to the Solana blockchain
+    await sendTransaction(walletAddress, decision);
 
     // After a 3-second delay (simulating minting), hide video and show result
     setTimeout(() => {
@@ -180,6 +167,21 @@ window.onload = () => {
       if (mintButton) {
         mintButton.style.display = "block"; // Show mint button again
       }
+      // The outcome will be determined by the transaction result
+      // For now, let's simulate the outcome as previously coded
+      const contractDecision = Math.random() > 0.5 ? 'cooperate' : 'steal';
+      let outcome = '';
+
+      if (decision === 'steal' && contractDecision === 'steal') {
+        outcome = 'Try again';
+      } else if (decision === 'cooperate' && contractDecision === 'cooperate') {
+        outcome = '1 smoothie minted';
+      } else if (decision === 'steal' && contractDecision === 'cooperate') {
+        outcome = '2 smoothies minted';
+      } else if (decision === 'cooperate' && contractDecision === 'steal') {
+        outcome = '1 SMEWTH token minted';
+      }
+
       outcomeMessage.innerText = outcome; // Display the outcome
       if (outcomeModal) {
         outcomeModal.style.display = "block"; // Show outcome modal
@@ -258,10 +260,12 @@ window.onload = () => {
 const { Connection, PublicKey, Transaction, TransactionInstruction } = solanaWeb3;
 
 // Connect to the Solana cluster
-const connection = new Connection('https://api.devnet.solana.com', 'confirmed');
-const programId = new PublicKey('YourProgramIdHere');
-const stateAccount = new PublicKey('YourStateAccountHere');
-const mintAccount = new PublicKey('YourMintAccountHere');
+const connection = new Connection('https://api.testnet.solana.com', 'confirmed');
+
+// Replace the placeholders with your actual public keys
+const programId = new PublicKey('YourProgramIdHere');  // Replace with your actual program ID
+const stateAccount = new PublicKey('YourStateAccountHere');  // Replace with your actual state account public key
+const mintAccount = new PublicKey('YourMintAccountHere');  // Replace with your actual mint account public key
 const systemProgram = new PublicKey('11111111111111111111111111111111');
 
 // Function to send mint transaction
