@@ -89,21 +89,6 @@ window.onload = () => {
       } else if (walletType === "Solflare") {
         if (window.solflare && window.solflare.isSolflare) {
           provider = window.solflare;
-          await provider.connect();
-
-          if (provider.publicKey) {
-            walletAddress = provider.publicKey.toString();
-            console.log("Connected to wallet:", walletAddress);
-
-            // Update the button to show the wallet address abbreviation
-            const abbreviatedAddress = `${walletAddress.slice(0, 3)}...${walletAddress.slice(-4)}`;
-            connectWalletButton.textContent = abbreviatedAddress;
-
-            // Hide wallet options dropdown
-            walletOptions.style.display = "none";
-          } else {
-            console.error("Failed to retrieve wallet public key.");
-          }
         } else {
           alert("Solflare wallet not detected.");
           return;
@@ -144,6 +129,10 @@ window.onload = () => {
   // Show the cooperation modal when the mint button is clicked
   if (mintButton) {
     mintButton.addEventListener("click", () => {
+      if (!walletAddress) {
+        alert("Please connect your wallet first");
+        return;
+      }
       if (cooperationModal) {
         cooperationModal.style.display = 'block';
       } else {
@@ -263,3 +252,53 @@ window.onload = () => {
   // Reset wallet connection on page refresh
   connectWalletButton.textContent = "Connect Wallet";
 };
+
+// Additional JavaScript to interact with Solana program
+
+const { Connection, PublicKey, Transaction, TransactionInstruction } = solanaWeb3;
+
+// Connect to the Solana cluster
+const connection = new Connection('https://api.devnet.solana.com', 'confirmed');
+const programId = new PublicKey('YourProgramIdHere');
+const stateAccount = new PublicKey('YourStateAccountHere');
+const mintAccount = new PublicKey('YourMintAccountHere');
+const systemProgram = new PublicKey('11111111111111111111111111111111');
+
+// Function to send mint transaction
+async function sendTransaction(wallet, decision) {
+  const instructionData = decision === 'cooperate' ? 0 : 1;
+
+  const transaction = new Transaction().add(
+    new TransactionInstruction({
+      keys: [
+        { pubkey: stateAccount, isSigner: false, isWritable: true },
+        { pubkey: wallet.publicKey, isSigner: true, isWritable: true },
+        { pubkey: mintAccount, isSigner: false, isWritable: true },
+        { pubkey: systemProgram, isSigner: false, isWritable: false },
+      ],
+      programId,
+      data: Buffer.from([instructionData]),
+    })
+  );
+
+  const signature = await wallet.signAndSendTransaction(transaction);
+  await connection.confirmTransaction(signature, 'confirmed');
+
+  console.log('Transaction signature', signature);
+}
+
+// Event listener for mint button
+document.getElementById('mintButton').addEventListener('click', async () => {
+  if (!walletAddress) {
+    alert('Please connect your wallet first');
+    return;
+  }
+
+  const decision = prompt('Do you want to cooperate or steal?', 'cooperate');
+  if (decision !== 'cooperate' && decision !== 'steal') {
+    alert('Invalid decision');
+    return;
+  }
+
+  await sendTransaction(walletAddress, decision);
+});
